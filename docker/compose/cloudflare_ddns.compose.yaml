@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+    cloudflare-ddns:
+        restart: always
+        container_name: cloudflare_ddns
+        environment:
+            - API_KEY=XXXXXXXXXXXXXXXXXXXX
+            - ZONE=example.com
+            - SUBDOMAIN=test
+        image: oznu/cloudflare-ddns

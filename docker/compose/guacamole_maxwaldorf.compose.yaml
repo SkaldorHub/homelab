@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+    guacamole:
+        container_name: guac_maxwaldorf
+        restart: always
+        ports:
+            - '128:8080'
+        volumes:
+            - '${PWD}:/config'
+        environment:
+            - EXTENSIONS=auth-totp
+        image: maxwaldorf/guacamole
