@@ -1,2 +1,2 @@
-# myhomenetwork
-This is where i put all my code i use for my Homenetwork
+# My own little Homelab
+This is the journey of my little homelab
