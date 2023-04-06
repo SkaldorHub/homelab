@@ -9,4 +9,4 @@ services:
     volumes:
       - '${PWD}:/etc/searxng'
     environment:
-      - INSTANCE_NAME=my-instance
+      - INSTANCE_NAME=surf
