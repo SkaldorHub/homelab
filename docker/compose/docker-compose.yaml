@@ -20,7 +20,7 @@ services:
       restart: always
       network_mode: host
       volumes:
-        - /home/apps/homeasisstant:/config
+        - /home/apps/homeassistant:/config
         - /etc/localtime:/etc/localtime:ro
       deploy:
         resources:
@@ -28,7 +28,6 @@ services:
             memory: 1G
           reservations:
             memory: 250M
-
       privileged: true
     homepage:
       container_name: homepage
@@ -68,3 +67,9 @@ services:
       volumes:
         - /home/apps/nginx_reverse_proxy/data:/data
         - /home/apps/nginx_reverse_proxy/letsencrypt:/etc/letsencrypt
+      deploy:
+        resources:
+          limits:
+            memory: 2G
+          reservations:
+            memory: 250M
