@@ -1,13 +1,19 @@
 version: '3.3'
 services:
     cloudflare-ddns:
-        container_name: cloudflare_ddns
-        image: oznu/cloudflare-ddns
-        restart: always
-        environment:
-            - API_KEY=XXXXXXXXXXXXXXXXXXXX
-            - ZONE=example.com
-            - SUBDOMAIN=test #comment to use the main domain
+      restart: always
+      container_name: cloudflare_ddns
+      environment:
+        - API_KEY=XXX
+        - ZONE=skaldor.uk
+      # - SUBDOMAIN=test #uncomment to use sub domain
+      image: oznu/cloudflare-ddns
+      deploy:
+        resources:
+          limits:
+            memory: 30M
+          reservations:
+            memory: 6M
     homeassistant:
       container_name: homeassistant
       image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -16,6 +22,13 @@ services:
       volumes:
         - /home/apps/homeasisstant:/config
         - /etc/localtime:/etc/localtime:ro
+      deploy:
+        resources:
+          limits:
+            memory: 1G
+          reservations:
+            memory: 250M
+
       privileged: true
     homepage:
       container_name: homepage
