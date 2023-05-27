@@ -7,7 +7,7 @@ services:
         environment:
             - API_KEY=XXXXXXXXXXXXXXXXXXXX
             - ZONE=example.com
-            - SUBDOMAIN=test
+            - SUBDOMAIN=test #comment to use the main domain
     homeassistant:
       container_name: homeassistant
       image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -31,6 +31,27 @@ services:
       image: 'vaultwarden/server:latest'
       restart: always
       ports:
-        - '125:80'
+        - 125:80
       volumes:
         - /home/apps/vaultwarden/vw-data/:/data/
+    nginx_proxy_manager:
+      container_name: nginx_reverse_proxy
+      image: 'jc21/nginx-proxy-manager:latest'
+      restart: always
+      ports:
+        # These ports are in format <host-port>:<container-port>
+        - 80:80 # Public HTTP Port
+        - 443:443 # Public HTTPS Port
+        - 124:81 # Admin Web Port
+        # Add any other Stream port you want to expose
+        # - 21:21 # FTP
+      # Uncomment the next line if you uncomment anything in the section
+      # environment:
+        # Uncomment this if you want to change the location of
+        # the SQLite DB file within the container
+        # DB_SQLITE_FILE: "/data/database.sqlite"
+        # Uncomment this if IPv6 is not enabled on your host
+        # DISABLE_IPV6: 'true'
+      volumes:
+        - /home/apps/nginx_reverse_proxy/data:/data
+        - /home/apps/nginx_reverse_proxy/letsencrypt:/etc/letsencrypt
