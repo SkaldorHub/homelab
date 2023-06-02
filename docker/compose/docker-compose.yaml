@@ -1,19 +1,24 @@
 version: '3.3'
 services:
+#####################################################################################################
     cloudflare-ddns:
-      restart: always
       container_name: cloudflare_ddns
+      image: oznu/cloudflare-ddns
+      restart: always
+      networks:
+        docker_net1:
+          ipv4_address: 10.228.210.4
       environment:
         - API_KEY=XXX
         - ZONE=skaldor.uk
       # - SUBDOMAIN=test #uncomment to use sub domain
-      image: oznu/cloudflare-ddns
       deploy:
         resources:
           limits:
             memory: 30M
           reservations:
             memory: 6M
+#####################################################################################################
     homeassistant:
       container_name: homeassistant
       image: "ghcr.io/home-assistant/home-assistant:stable"
@@ -29,27 +34,39 @@ services:
           reservations:
             memory: 250M
       privileged: true
+#####################################################################################################
     homepage:
       container_name: homepage
       image: ghcr.io/benphelps/homepage:latest
       restart: always
+      networks:
+        docker_net1:
+          ipv4_address: 10.228.210.3
       ports:
         - 126:3000
       volumes:
         - /home/apps/homepage:/app/config # Make sure your local config directory exists
         - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+#####################################################################################################
     vaultwarden:
       container_name: vaultwarden
       image: 'vaultwarden/server:latest'
       restart: always
+      networks:
+        docker_net1:
+          ipv4_address: 10.228.210.2
       ports:
         - 125:80
       volumes:
         - /home/apps/vaultwarden/vw-data/:/data/
+#####################################################################################################
     nginx_proxy_manager:
       container_name: nginx_reverse_proxy
       image: 'jc21/nginx-proxy-manager:latest'
       restart: always
+      networks:
+        docker_net1:
+          ipv4_address: 10.228.210.1
       ports:
         # These ports are in format <host-port>:<container-port>
         - 80:80 # Public HTTP Port
@@ -73,3 +90,16 @@ services:
             memory: 2G
           reservations:
             memory: 250M
+            
+#####################################################################################################
+networks:
+  docker_net1:
+    name: docker_net1
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: "10.228.0.0/16"
+          ip_range: "10.228.210.0/24"
+          gateway: "10.228.0.10"
