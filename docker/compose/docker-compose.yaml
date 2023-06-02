@@ -23,7 +23,7 @@ services:
       container_name: homeassistant
       image: "ghcr.io/home-assistant/home-assistant:stable"
       restart: always
-      network_mode: host
+      network_mode: host #Port:8123
       volumes:
         - /home/apps/homeassistant:/config
         - /etc/localtime:/etc/localtime:ro
@@ -41,9 +41,7 @@ services:
       restart: always
       networks:
         docker_net1:
-          ipv4_address: 10.228.210.3
-      ports:
-        - 126:3000
+          ipv4_address: 10.228.210.3 #Port:3000
       volumes:
         - /home/apps/homepage:/app/config # Make sure your local config directory exists
         - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
@@ -54,9 +52,7 @@ services:
       restart: always
       networks:
         docker_net1:
-          ipv4_address: 10.228.210.2
-      ports:
-        - 125:80
+          ipv4_address: 10.228.210.2 #Port:80
       volumes:
         - /home/apps/vaultwarden/vw-data/:/data/
 #####################################################################################################
@@ -71,7 +67,7 @@ services:
         # These ports are in format <host-port>:<container-port>
         - 80:80 # Public HTTP Port
         - 443:443 # Public HTTPS Port
-        - 124:81 # Admin Web Port
+        #- 124:81 # Admin Web Port
         # Add any other Stream port you want to expose
         # - 21:21 # FTP
       # Uncomment the next line if you uncomment anything in the section
@@ -90,7 +86,7 @@ services:
             memory: 2G
           reservations:
             memory: 250M
-            
+
 #####################################################################################################
 networks:
   docker_net1:
